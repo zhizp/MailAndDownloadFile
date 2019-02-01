@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ele.project.common.dao.LoginDao">
+	<select id="selectUser" resultType="com.ele.project.sysmanager.user.pojo.UserDTO" parameterType="com.ele.project.sysmanager.user.pojo.UserDTO">
+		select * from user where username = #{username,jdbcType=VARCHAR} and password=#{password,jdbcType=VARCHAR}
+	</select>
+	
+	<select id="getUserDTOByName" resultType="Map" parameterType="Map">
+		select * from user where   username = #{username,jdbcType=VARCHAR}
+	</select>
+	<insert id="insertUser" parameterType="Map">
+		insert into user (id,username,password,email,rs,createdate,code)values(#{id},#{username},#{password},#{email},#{rs},#{createdate},#{code})
+	</insert>
+	<select id="queryUserList" parameterType="Map" resultType="Map">
+		select * from user where  state='1'
+		<if test="username!=null and username!=''">
+			and username=#{username,jdbcType=VARCHAR}
+		</if>
+		order by username 
+		LIMIT #{startRow},#{pageSize}
+	</select>
+	<select id="queryUserCount" parameterType="Map" resultType="int">
+		select count(1) from user where  state='1'
+		<if test="username!=null and username!=''">
+			and username=#{username,jdbcType=VARCHAR}
+		</if>
+	</select>
+	<delete id="deleteUserById" parameterType="String">
+		delete from user where id=#{id,jdbcType=VARCHAR}
+	</delete>
+	<update id="updateFilePath" parameterType="Map">
+		update user set path=#{path} where id=#{id}
+	</update>
+	<select id="getFilePathByid" parameterType="Map" resultType="Map">
+		select * from user where id=#{id}
+	</select>
+	<update id="updateUserState" parameterType="Map">
+		update user set state='1' where id=#{id}
+	</update>
+</mapper>
